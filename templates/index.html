@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOME/IP Test Interface</title>
+    <style>
+        .panel {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px;
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .response-area {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SOME/IP Test Interface</h1>
+    
+    <div class="panel">
+        <h2>Service Subscription</h2>
+        <div class="service-grid">
+            <div><input type="checkbox" id="0x0113" value="0x0113"><label for="0x0113">0x0113-WiperAndWasher</label></div>
+            <div><input type="checkbox" id="0x1126" value="0x1126"><label for="0x1126">0x1126-EnergyMode</label></div>
+            <div><input type="checkbox" id="0x010D" value="0x010D"><label for="0x010D">0x010D-BatteryData</label></div>
+            <div><input type="checkbox" id="0x1125" value="0x1125"><label for="0x1125">0x1125-VehicleMode</label></div>
+            <!-- Add all other services -->
+        </div>
+    </div>
+
+    <div id="methodPanel" class="panel">
+        <h3>Service Method Call (for 0x0113 and 0x1126)</h3>
+        <form id="methodForm">
+            <select id="serviceSelect">
+                <option value="0x0113">0x0113</option>
+                <option value="0x1126">0x1126</option>
+                <option value="0x010D">0x010D</option>
+                <option value="0x1125">0x1125</option>
+            </select>
+            <input type="text" id="methodId" placeholder="Method ID">
+            <textarea id="payload" placeholder="Payload"></textarea>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Service Provider (0x0303)</h2>
+        <form id="providerForm">
+            <textarea id="providerPayload" placeholder="Provider Payload"></textarea>
+            <button type="submit">Start Service</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h2>Response Area</h2>
+        <div id="responseArea" class="response-area">
+            <pre id="responseContent"></pre>
+        </div>
+    </div>
+
+    <div id="response-area" style="border:1px solid #ccc; padding:10px; height:300px; overflow-y:auto;">
+        <h4>Response Area</h4>
+        <div id="response-content"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle service subscription
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    fetch('/subscribe', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            service: this.value,
+                            subscribed: this.checked
+                        })
+                    });
+                });
+            });
+
+            // Handle method calls
+            document.getElementById('methodForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                fetch('/send_method', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        service: document.getElementById('serviceSelect').value,
+                        methodId: document.getElementById('methodId').value,
+                        payload: document.getElementById('payload').value
+                    })
+                });
+            });
+
+            // Auto-fill Method ID and Payload for 0x1126
+            document.getElementById('serviceSelect').addEventListener('change', function() {
+                const serviceSelect = document.getElementById('serviceSelect');
+                const methodIdInput = document.getElementById('methodId');
+                const payloadInput = document.getElementById('payload');
+
+                if (serviceSelect.value === '0x1126') {
+                    methodIdInput.value = '0001';
+                    payloadInput.value = '05 0000 01';
+                } else {
+                    methodIdInput.value = '';
+                    payloadInput.value = '';
+                }
+            });
+        });
+    </script>
+    <script>
+        // 添加WebSocket连接（推荐）
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+        const ws = new WebSocket(`${wsProtocol}//${window.location.host}/updates`)
+        
+        ws.onmessage = function(event) {
+          const data = JSON.parse(event.data)
+          const contentDiv = document.getElementById('response-content')
+          
+          // 显示原始16进制数据
+          const hexBlock = document.createElement('pre')
+          hexBlock.style.color = '#4CAF50'
+          hexBlock.textContent = `[${new Date().toLocaleTimeString()}] 原始报文: ${data.hex}`
+          
+          // 显示解析后的数据（根据您的协议结构）
+          const parsedBlock = document.createElement('div')
+          parsedBlock.innerHTML = `<span style="color:#2196F3">[${new Date().toLocaleTimeString()}] 解析数据: ${JSON.stringify(data.parsed)}</span>`
+          
+          contentDiv.appendChild(hexBlock)
+          contentDiv.appendChild(parsedBlock)
+          
+          // 自动滚动到底部
+          contentDiv.scrollTop = contentDiv.scrollHeight
+        }
+    </script>
+</body>
+</html>
