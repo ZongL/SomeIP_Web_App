@@ -11,19 +11,16 @@ from someip.sd import SOMEIPDatagramProtocol, ServiceDiscoveryProtocol
 
 loggerdeb = logging.getLogger('SOME/IP')
 
-
-
 logging.getLogger("someip.sd").setLevel(logging.WARNING)
 logging.getLogger("someip.sd.announce").setLevel(logging.WARNING)
-
 
 def enhex(buf, sep=" "):
     return sep.join("%02x" % b for b in buf)
 
-
 class EventGroupReceiver(SOMEIPDatagramProtocol):
-    def __init__(self):
+    def __init__(self, socketio):
         super().__init__(logger="notification")
+        self.socketio = socketio
 
     def message_received(
         self,
@@ -38,10 +35,11 @@ class EventGroupReceiver(SOMEIPDatagramProtocol):
             pass
         if someip_message.service_id == 0x1126:
             print('DEBUG POINT: Response = '+ someip_message.payload.hex())
-
+            self.socketio.emit('log_message', {'message': someip_message.payload.hex()})
 
 class SomeIPMiddleware:
-    def __init__(self):
+    def __init__(self, socketio):
+        self.socketio = socketio
         self.loop = asyncio.get_event_loop()
         self.subscribers = {}
         self.sock = None
@@ -78,7 +76,8 @@ class SomeIPMiddleware:
         )
         
         self.evgrp_receiver, _ = await EventGroupReceiver.create_unicast_endpoint(
-            local_addr=(self.local_addr, self.endpoint_port)
+            local_addr=(self.local_addr, self.endpoint_port),
+            socketio=self.socketio  # 传递 socketio 对象 给EventGroupReceiver中的socketio.emit
         )
         
         self.protocol.start()
@@ -148,14 +147,6 @@ class SomeIPMiddleware:
 
     def send_request(self, service_id, method_id, payload):
         """发送SOME/IP请求
-        
-        Args:
-            service_id (int): 服务ID
-            method_id (int): 方法ID
-            payload (str): 16进制字符串格式的负载
-            
-        Returns:
-            dict: 包含响应状态的字典
         """
         try:
             # 构建SOME/IP消息头
