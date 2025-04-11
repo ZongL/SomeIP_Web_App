@@ -23,7 +23,7 @@ This project provides a web-based HTML interface for SOME/IP message sending and
 ## 功能介绍
 
 ### 1. 页面截图
-![Web Interface](images/index.png)
+![Web Interface](images/index.PNG)
 
 ### 2. 服务订阅区
 - **功能**：允许用户通过复选框订阅特定的 SOME/IP 服务。
