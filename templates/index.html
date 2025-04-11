@@ -34,23 +34,23 @@
     <div class="panel">
         <h2>Service Subscription</h2>
         <div class="service-grid">
-            <div><input type="checkbox" id="0x0113" value="0x0113"><label for="0x0113">0x0113-WiperAndWasher</label></div>
-            <div><input type="checkbox" id="0x1126" value="0x1126"><label for="0x1126">0x1126-EnergyMode</label></div>
-            <div><input type="checkbox" id="0x010D" value="0x010D"><label for="0x010D">0x010D-BatteryData</label></div>
-            <div><input type="checkbox" id="0x1125" value="0x1125"><label for="0x1125">0x1125-VehicleMode</label></div>
+            <div><input type="checkbox" id="0x1111" value="0x1111"><label for="0x1111">0x1111-WiperAndWasher</label></div>
+            <div><input type="checkbox" id="0x2222" value="0x2222"><label for="0x2222">0x2222-EnergyMode</label></div>
+            <div><input type="checkbox" id="0x3333" value="0x3333"><label for="0x3333">0x3333-BatteryData</label></div>
+            <div><input type="checkbox" id="0x4444" value="0x4444"><label for="0x4444">0x4444-VehicleMode</label></div>
             <!-- Add all other services -->
         </div>
     </div>
 
     <div id="methodPanel" class="panel">
-        <h3>Service Method Call (for 0x0113 and 0x1126)</h3>
+        <h3>Service Method Call</h3>
         <form id="methodForm">
             <select id="serviceSelect">
-                <option value="0x0113">0x0113</option>
-                <option value="0x1126">0x1126</option>
-                <option value="0x010D">0x010D</option>
-                <option value="0x1125">0x1125</option>
-                <option value="0x0114">0x0114</option>
+                <option value="0x1111">0x1111</option>
+                <option value="0x2222">0x2222</option>
+                <option value="0x3333">0x3333</option>
+                <option value="0x4444">0x4444</option>
+                <option value="0x5555">0x5555</option>
             </select>
             <input type="text" id="methodId" placeholder="Method ID">
             <textarea id="payload" placeholder="Payload"></textarea>
@@ -59,7 +59,7 @@
     </div>
 
     <div class="panel">
-        <h2>Service Provider (0x0303)</h2>
+        <h2>Service Provider</h2>
         <form id="providerForm">
             <textarea id="providerPayload" placeholder="Provider Payload"></textarea>
             <button type="submit">Start Service</button>
@@ -108,13 +108,13 @@
                 });
             });
 
-            // Auto-fill Method ID and Payload for 0x1126
+            // Auto-fill Method ID and Payload for 0x2222
             document.getElementById('serviceSelect').addEventListener('change', function() {
                 const serviceSelect = document.getElementById('serviceSelect');
                 const methodIdInput = document.getElementById('methodId');
                 const payloadInput = document.getElementById('payload');
 
-                if (serviceSelect.value === '0x1126') {
+                if (serviceSelect.value === '0x2222') {
                     methodIdInput.value = '0001';
                     payloadInput.value = '05 0000 01';
                 } else if (serviceSelect.value === '0x0114') {

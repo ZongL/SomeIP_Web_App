@@ -31,9 +31,7 @@ class EventGroupReceiver(SOMEIPDatagramProtocol):
         """
         called when a well-formed SOME/IP datagram was received
         """
-        if someip_message.service_id == 0x010D:        
-            pass
-        if someip_message.service_id == 0x1126:
+        if someip_message.message_type  == 0x80:
             print('DEBUG POINT: Response = '+ someip_message.payload.hex())
             self.socketio.emit('log_message', {'message': someip_message.payload.hex()})
 

@@ -23,21 +23,21 @@ This project provides a web-based HTML interface for SOME/IP message sending and
 ## 功能介绍
 
 ### 1. 页面截图
-![Web Interface](images/index.PNG)
+![Web Interface](images/index.png)
 
 ### 2. 服务订阅区
 - **功能**：允许用户通过复选框订阅特定的 SOME/IP 服务。
 - **支持的服务 ID**：
-  - 0x0113 (WiperWasher)
-  - 0x1126 (EgySaveModeSts)
-  - 0x010D (LowBattData)
-  - 0x1125 (VehModSts)
+  - 0x1111 (WiperWasher)
+  - 0x2222 (EgySaveModeSts)
+  - 0x3333 (LowBattData)
+  - 0x4444 (VehModSts)
 
 ### 3. 方法调用区
 - **功能**：允许用户发送方法调用请求。
 - **支持的服务 ID 和方法 ID**：
-  - 0x0113: Method ID `0001`，Payload `05 0000 01`
-  - 0x1126: Method ID `0001`，Payload `05 0000 01`
+  - 0x1111: Method ID `0001`，Payload `05 0000 01`
+  - 0x2222: Method ID `0001`，Payload `05 0000 01`
 
 ### 4. 响应显示区
 - **功能**：实时显示从 SOME/IP 服务接收到的响应数据。
