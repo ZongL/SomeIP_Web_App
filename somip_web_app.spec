@@ -39,7 +39,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='pysomip',
+    name='somip_web_app',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
