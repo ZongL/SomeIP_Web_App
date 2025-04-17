@@ -59,3 +59,9 @@ This project provides a web-based HTML interface for SOME/IP message sending and
 运行 `app.py` 文件，启动 Flask 服务器：
 ```bash
 python app.py
+```
+## 打包成exe程序
+运行 
+```bash
+pyinstaller .\pysomip.spec
+```
