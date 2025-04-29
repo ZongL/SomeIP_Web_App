@@ -3,7 +3,7 @@ This project provides a web-based HTML interface for SOME/IP message sending and
 
 ## 项目介绍
 这是一个基于 Web 的测试工具，用于发送和接收 SOME/IP 消息。通过简单的 HTML 界面，用户可以订阅 SOME/IP 服务、发送方法调用请求，并实时查看响应数据。该项目旨在简化 SOME/IP 通信的测试和调试过程。
-
+![Web Interface](images/system.png)
 ## TaskList
 - [x] SOME/IP基础功能
     - [x] 服务订阅
@@ -67,12 +67,18 @@ This project provides a web-based HTML interface for SOME/IP message sending and
 ## 使用方法
 
 ### 1. 启动后端服务
-确保后端服务（如 `pysomeip` 或其他 SOME/IP 服务端）已启动并运行。后端服务应监听指定的端口，以便与 Web 应用进行通信。
+确保控制器端服务（或其他 SOME/IP 服务端）已启动并运行。服务端应监听指定的端口，以便与 Web 应用进行通信。
 
 ### 2. 运行 Flask 应用
 运行 `app.py` 文件，启动 Flask 服务器：
 ```bash
 python app.py
+```
+确保相关库已安装
+```bash
+pip install Flask
+pip install someip
+pip install flask_socketio
 ```
 ## 打包成exe程序
 运行 
