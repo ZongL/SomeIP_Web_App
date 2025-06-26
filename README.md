@@ -83,5 +83,5 @@ pip install flask_socketio
 ## 打包成exe程序
 运行 
 ```bash
-pyinstaller .\pysomip.spec
+pyinstaller .\someip_web_app.spec
 ```
